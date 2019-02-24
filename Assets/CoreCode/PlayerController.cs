@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public Vector2 moveInput;   // = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-    //Will be used for gravity
-    public bool isGrounded = true;
+    //Will be used for gravity. Gets enabled/disabled on collisions with "Ground" tag
+    public bool isGrounded = false;
 
 
     //private variables
@@ -27,7 +27,9 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         
+        Debug.Log(isGrounded);
     }
+
 
     //manages anything dealing with physics
     private void FixedUpdate()
@@ -46,8 +48,23 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Ground")
+        {
+            isGrounded = true;
+            rb.gravityScale = 0f;
+        }
+    }
 
-
+    void OnCollisionExit2D(Collision2D col)
+     {
+         if (col.gameObject.tag == "Ground")
+         {
+             isGrounded = false;
+            rb.gravityScale = 19.8f;
+        }
+     }
 
 
 
